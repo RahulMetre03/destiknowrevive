@@ -1,0 +1,177 @@
+/* locationcard.css */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: white;
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: fit-content; /* Ensure cards only take needed height */
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-content {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  margin: 0 0 8px 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-category {
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.button-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto; /* Push buttons to bottom of card content */
+  margin-bottom: 10px;
+}
+
+.read-more-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.read-more-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.read-more-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 40px;
+  transition: background-color 0.2s ease;
+}
+
+.clear-btn:hover {
+  background-color: #c82333;
+}
+
+.error-section {
+  margin-top: 10px;
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 0.9em;
+  margin: 0;
+  padding: 8px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* Details container - always present but conditionally visible */
+.card-details-container {
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  max-height: 0;
+}
+
+.card-details-container.expanded {
+  max-height: 1000px; /* Large enough to accommodate any content */
+}
+
+.card-details {
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.9em;
+  border: 1px solid #e9ecef;
+}
+
+.card-details p {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.card-details p:first-child {
+  margin-top: 0;
+}
+
+.card-details p:last-child {
+  margin-bottom: 0;
+}
+
+.card-details strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Ensure consistent grid layout */
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  align-items: start; /* Important: align cards to start instead of stretch */
+}
+
+/* Loading and error states */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 1.1em;
+  margin: 0;
+}
