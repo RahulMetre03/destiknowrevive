@@ -19,7 +19,7 @@ const LocationCard = ({ location, category }) => {
     try {
       console.log('Calling API for:', location.placeName);
 
-      const response = await fetch('http://localhost:5000/api/locations/get-details', {
+      const response = await fetch('https://destiknowrevive.onrender.com/api/locations/get-details', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
