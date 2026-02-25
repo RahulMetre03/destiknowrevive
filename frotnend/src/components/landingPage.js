@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser, checkLogin } from '../services/apiServices';
+// import { registerUser, checkLogin } from '../services/apiServices';
+import apiService from '../services/apiServices';
 import './landing.css';
 
 const LandingPage = ({ setIsLoggedIn }) => {
@@ -41,7 +42,7 @@ const LandingPage = ({ setIsLoggedIn }) => {
           return;
         }
 
-        const response = await checkLogin({
+        const response = await apiService.checkLogin({
           username: formData.username,
           password: formData.password
         });
@@ -68,7 +69,7 @@ const LandingPage = ({ setIsLoggedIn }) => {
           return;
         }
 
-        const response = await registerUser(formData);
+        const response = await apiService.registerUser(formData);
 
         if (!response.success) {
           setError(true);
