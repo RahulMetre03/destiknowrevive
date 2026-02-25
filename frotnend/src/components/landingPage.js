@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import apiService from '../services/apiServices';
 import './landing.css';
 
-const LandingPage = ({ setIsLoggedIn }) => {
+const LandingPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [ isLoggedIn,setIsLoggedIn] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
