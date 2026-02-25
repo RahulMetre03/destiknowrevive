@@ -1,7 +1,7 @@
 // services/locationService.js
 import ApiService from './apiServices.js';
 import axios from 'axios';
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://destiknowrevive.onrender.com/api';
 
 export class LocationService {
   // Search for locations
