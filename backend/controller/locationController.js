@@ -1,4 +1,4 @@
-import {Location} from '../models/Location.js';
+import { Location } from '../models/Location.js';
 import RestaurantData from '../models/RestaurantData.js';
 import AdventureData from '../models/AdventureData.js';
 import SceneryData from '../models/SceneryData.js';
@@ -18,7 +18,7 @@ export const searchLocations = async (req, res) => {
 
     const locations = await Location.find({
       categoryName: { $regex: search, $options: 'i' },
-      city: city
+      city: { $regex: `^${city}$`, $options: 'i' }
     });
 
     if (locations.length === 0) {
@@ -97,7 +97,7 @@ export const applyFilters = async (req, res) => {
 
     const locations = await Location.find({
       placeId: { $in: placeIds },
-      city: city
+      city: { $regex: `^${city}$`, $options: 'i' }
     });
 
     const locationsWithImages = locations.map(location => ({
@@ -155,7 +155,7 @@ export const getDetails = async (req, res) => {
       return res.status(400).json({ message: 'tablename and placeId are required' });
     }
 
-    const tableNameFinal = tablename.charAt(0).toUpperCase() + tablename.slice(1).toLowerCase() + 'Data';
+    const tableNameFinal = tablename.charAt(0).toLowerCase() + tablename.slice(1).toLowerCase() + 'datas';
 
     // Ensure the model is already registered
     if (!mongoose.models[tableNameFinal]) {
@@ -163,6 +163,8 @@ export const getDetails = async (req, res) => {
     }
 
     const Model = mongoose.models[tableNameFinal];
+
+    console.log(tableNameFinal);
 
     const details = await Model.findOne({ placeId });
 

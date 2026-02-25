@@ -1,201 +1,157 @@
-// App.js
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import SearchHeader from '../SearchHeader';
+import FilterForm from '../FilterForm';
 import LocationGrid from '../LocationGrid';
-import FilterForm from '../FilterForm.js';
-import { LocationService } from '../../services/LocationService.js';
+import { LocationService } from '../../services/LocationService';
 import './Explore.css';
 
-function Explore() {
+const Explore = () => {
   const [locations, setLocations] = useState([]);
   const [filters, setFilters] = useState([]);
   const [currentCategory, setCurrentCategory] = useState('');
+  const [currentCity, setCurrentCity] = useState(
+    localStorage.getItem('city') || ''
+  );
+
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [currentCity, setCurrentCity] = useState('');
+  const [error, setError] = useState(null);
 
-  // Initialize currentCity from localStorage on component mount
-  useEffect(() => {
-    const cityasofnow = localStorage.getItem('city');
-    if (cityasofnow) {
-      setCurrentCity(cityasofnow);
-    }
-  }, []);
-
-  // Handle search functionality
-  const handleSearch = useCallback(async (searchTerm) => {
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Add more detailed logging
-      console.log('Starting search for:', searchTerm);
-      
-      const result = await LocationService.searchLocations(searchTerm, currentCity);
-      
-      // Check if result exists and log it
-      if (!result) {
-        throw new Error('No data received from API');
-      }
-      
-      console.log('API full result:', result);
-      console.log('Result type:', typeof result);
-      console.log('Result keys:', Object.keys(result));
-      
-      // Handle the response data
-      const locationsData = result.locations || [];
-      const filtersData = result.filters || [];
-      const categoryData = result.category || '';
-      
-      console.log('Parsed locations:', locationsData);
-      console.log('Parsed filters:', filtersData);
-      console.log('Parsed category:', categoryData);
-      
-      setLocations(locationsData);
-      setFilters(filtersData);
-      setCurrentCategory(categoryData);
-      setShowFilters(filtersData.length > 0);
-      
-    } catch (err) {
-      console.error('Search error:', err);
-      setError(err.message || 'Failed to search locations');
-      setLocations([]);
-      setFilters([]);
-      setShowFilters(false);
-    } finally {
-      setLoading(false);
-    }
-  }, [currentCity]);
-
-  // Handle filter application
-  const handleApplyFilters = useCallback(async (filterValues) => {
-    if (!currentCategory) {
-      setError('No category selected');
-      return;
-    }
+  const handleSearch = async (category) => {
+    if (!category.trim()) return;
 
     setLoading(true);
-    setError('');
-    
+    setError(null);
     try {
-      console.log('Applying filters:', filterValues, 'for category:', currentCategory);
-      
-      const result = await LocationService.applyFilters(currentCategory, filterValues, currentCity);
-      
-      if (!result) {
-        throw new Error('No data received from filter API');
-      }
-      
-      console.log('Filter result:', result);
-      setLocations(result.locations || []);
-      
+      const data = await LocationService.searchLocations(category, currentCity);
+      setLocations(data.locations || []);
+      setFilters(data.filters || []);
+      setCurrentCategory(data.category || category);
     } catch (err) {
-      console.error('Filter error:', err);
-      setError(err.message || 'Failed to apply filters');
+      setError('An unexpected error occurred. Please try again.');
       setLocations([]);
     } finally {
       setLoading(false);
     }
-  }, [currentCategory, currentCity]);
+  };
 
-  // Handle location card click
-  const handleLocationClick = useCallback(async (location) => {
+  const handleApplyFilters = async (filterValues) => {
+    setLoading(true);
+    setError(null);
     try {
-      console.log('Getting details for location:', location);
-      
-      const result = await LocationService.getLocationDetails(location.placeId);
-      
-      if (!result) {
-        throw new Error('No location details received');
-      }
-      
-      console.log('Location details:', result.location);
-      
-      // For now, just alert with location info
-      alert(`Location: ${location.placeName}\nCategory: ${location.categoryName}`);
-      
-    } catch (err) {
-      console.error('Failed to get location details:', err);
-      alert('Failed to load location details');
-    }
-  }, []);
+      const placeIds = locations.map(loc => loc.placeId);
+      const data = await LocationService.applyFilters(
+        filterValues,
+        currentCategory,
+        placeIds,
+        currentCity
+      );
 
-  // Reset search
-  const handleReset = useCallback(() => {
-    setLocations([]);
-    setFilters([]);
-    setCurrentCategory('');
-    setShowFilters(false);
-    setError('');
-  }, []);
+      setLocations(data.locations || []);
+    } catch (err) {
+      setError('Failed to apply filters. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const categories = [
+    { name: 'Restaurant', emoji: '🍽️', desc: 'Fine dining & street food' },
+    { name: 'Adventure', emoji: '🏔️', desc: 'Thrills & extreme sports' },
+    { name: 'Scenery', emoji: '🌅', desc: 'Breathtaking viewpoints' },
+    { name: 'Resorts', emoji: '🏖️', desc: 'Luxury stays & chill' },
+    { name: 'Games', emoji: '🎮', desc: 'Arcades & activity centers' }
+  ];
 
   return (
     <div className="app">
-      <SearchHeader 
-      currentCity={currentCity}
-      setCurrentCity={setCurrentCity}
-        onSearch={handleSearch} 
+      <SearchHeader
+        currentCity={currentCity}
+        setCurrentCity={(city) => {
+          setCurrentCity(city);
+          localStorage.setItem('city', city);
+        }}
+        onSearch={handleSearch}
         loading={loading}
       />
-      
+
       <main className="main-content">
         {error && (
           <div className="error-banner">
-            <p>{error}</p>
-            <button onClick={handleReset} className="reset-btn">
-              Try Again
-            </button>
+            <span>{error}</span>
+            <button onClick={() => setError(null)} className="reset-btn">Dismiss</button>
           </div>
         )}
 
-        <div className="content-container">
-          <div className="results-section">
-            <LocationGrid
-              category={currentCategory}
-              locations={locations}
-              onLocationClick={handleLocationClick}
-              loading={loading}
-              error={error}
-            />
-          </div>
+        {/* Dynamic content rendering based on search state */}
+        <div className="content-container" style={{ display: locations.length === 0 ? 'block' : 'grid' }}>
 
-          {showFilters && (
-            <div className="filters-section">
-              <FilterForm
-                filters={filters}
-                category={currentCategory}
-                onApplyFilters={handleApplyFilters}
-                loading={loading}
-              />
+          {/* Welcome Dashboard when empty */}
+          {locations.length === 0 && !loading && !error && (
+            <div className="welcome-section">
+              <h2>Select your vibe.</h2>
+              <p>Discover hand-picked spots for dining, adventures, relaxing, and more.</p>
+
+              <div className="category-suggestions">
+                <h3>Popular Categories</h3>
+                <div className="suggestion-buttons">
+                  {categories.map((cat, index) => (
+                    <button
+                      key={cat.name}
+                      onClick={() => handleSearch(cat.name)}
+                      className={`suggestion-btn stagger-${index + 1}`}
+                      disabled={loading}
+                    >
+                      <span className="emoji">{cat.emoji}</span>
+                      <span className="label">{cat.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Render Filters & Grid when locations exist */}
+          {locations.length > 0 && (
+            <>
+              <aside className="filters-section glass-panel">
+                <FilterForm
+                  filters={filters}
+                  category={currentCategory}
+                  onApplyFilters={handleApplyFilters}
+                  loading={loading}
+                />
+              </aside>
+
+              <section className="results-section">
+                <div className="results-header">
+                  <div className="results-count">
+                    <strong>{locations.length}</strong>
+                    {locations.length === 1 ? 'place' : 'places'} found
+                    {currentCategory && <span className="text-gradient"> in {currentCategory}</span>}
+                  </div>
+                </div>
+
+                <LocationGrid
+                  locations={locations}
+                  category={currentCategory}
+                  loading={loading}
+                  error={error}
+                />
+              </section>
+            </>
+          )}
+
+          {/* Full page loader */}
+          {loading && locations.length === 0 && (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <h3 className="text-gradient">Scanning dimensions...</h3>
             </div>
           )}
         </div>
-
-        {locations.length === 0 && !loading && !error && (
-          <div className="welcome-section">
-            <h2>Welcome to Let's Explore</h2>
-            <p>Search for restaurants, adventures, scenery, resorts, and more!</p>
-            <div className="category-suggestions">
-              <h3>Try searching for:</h3>
-              <div className="suggestion-buttons">
-                {['Restaurant', 'Adventure', 'Scenery', 'Resorts', 'Games'].map(category => (
-                  <button
-                    key={category}
-                    onClick={() => handleSearch(category)}
-                    className="suggestion-btn"
-                    disabled={loading}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );
-}
+};
 
 export default Explore;

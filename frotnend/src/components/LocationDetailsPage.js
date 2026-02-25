@@ -1,45 +1,106 @@
-
 import './LocationDetailsPage.css';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LocationDetailsPage = () => {
-
-    const navigate = useNavigate();
-
-    const { state } = useLocation();
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const { location, details } = state || {};
 
+  const handleback = () => navigate('/explore');
 
-  const handleback =()=>{
-    navigate('/explore');
+  const formatKey = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  const excludedKeys = ['_id', '__v', 'placeId', 'createdAt', 'updatedAt'];
+
+  if (!location) {
+    return (
+      <div className="empty-portal">
+        <div>
+          <h2 className="portal-msg">Awaiting Coordinates...</h2>
+          <button onClick={handleback} className="btn-primary">Return to Explorer</button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    
-    <div className="details-container">
-      <button onClick={handleback}>Go back</button>
-      <div className="card">
-        <h2>{location.placeName}</h2>
-        <p className="description">{location.description}</p>
+    <div className="details-page">
+      {/* Immersive Hero Header */}
+      <header className="details-hero">
+        <div className="hero-glass-overlay"></div>
+        <button onClick={handleback} className="back-btn">
+          ← Back to Map
+        </button>
+        <div className="details-category-badge">{location.categoryName}</div>
+        <h1 className="details-title">{location.placeName}</h1>
+      </header>
 
-        <div className="info-grid">
-          <div><strong>Category:</strong> {location.categoryName}</div>
-          <div><strong>City:</strong> {location.city}</div>
-          <div><strong>State:</strong> {location.state}</div>
-          <div><strong>Country:</strong> {location.country}</div>
-        </div>
-      </div>
+      {/* Split-pane Content Container */}
+      <div className="details-container">
 
-      <div className="card">
-        <h3>Place Details</h3>
-        <div className="info-grid">
-          <div><strong>Area:</strong> {details.area}</div>
-          <div><strong>Cuisine:</strong> {details.cuisine}</div>
-          <div><strong>Ambience:</strong> {details.ambience}</div>
-          <div><strong>Budget:</strong> ₹{details.budget}</div>
-          <div><strong>Max People Allowed:</strong> {details.numberAllowed}</div>
-        </div>
+        {/* Left Column: Narrative/Core Location Info */}
+        <main className="details-main">
+          <section className="overview-card">
+            <h2 className="section-title">Overview</h2>
+
+            {location.description ? (
+              <p className="description-text">{location.description}</p>
+            ) : (
+              <p className="description-text" style={{ fontStyle: 'italic', opacity: 0.6 }}>
+                No detailed description available for this coordinate yet.
+              </p>
+            )}
+
+            <div className="location-tags">
+              {location.city && (
+                <div className="loc-tag">
+                  <i>📍</i> {location.city}
+                </div>
+              )}
+              {location.state && (
+                <div className="loc-tag">
+                  <i>🗺️</i> {location.state}
+                </div>
+              )}
+              {location.country && (
+                <div className="loc-tag">
+                  <i>🌍</i> {location.country}
+                </div>
+              )}
+            </div>
+          </section>
+        </main>
+
+        {/* Right Column: Telemetry/Specific Details */}
+        <aside className="details-sidebar">
+          {details ? (
+            <section className="data-card">
+              <h2 className="section-title">Telemetry Data</h2>
+              <div className="telemetry-grid">
+                {Object.entries(details)
+                  .filter(([key]) => !excludedKeys.includes(key))
+                  .map(([key, value]) => {
+                    const isMonetary = typeof value === 'number' && ['budget', 'price'].includes(key.toLowerCase());
+                    const displayValue = isMonetary ? `₹${value.toLocaleString()}` : String(value);
+
+                    return (
+                      <div className="telemetry-item" key={key}>
+                        <span className="tel-label">{formatKey(key)}</span>
+                        <span className={`tel-value ${isMonetary ? 'highlight' : ''}`}>
+                          {displayValue}
+                        </span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </section>
+          ) : (
+            <section className="data-card" style={{ opacity: 0.5 }}>
+              <h2 className="section-title">Telemetry Data</h2>
+              <p>Scanning sectors... No deep telemetry available for this node.</p>
+            </section>
+          )}
+        </aside>
+
       </div>
     </div>
   );

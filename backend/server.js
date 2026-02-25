@@ -8,7 +8,7 @@ import loginRoutes from './routes/login.js'
 dotenv.config();
 const app = express();
 
-const PORT=5000
+const PORT = 5000
 
 
 connectDB();
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/users', loginRoutes);
-app.use('/api/locations',locationRoutes);
+app.use('/api/locations', locationRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

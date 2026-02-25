@@ -8,4 +8,4 @@ const gamesDataSchema = new mongoose.Schema({
   budget: { type: Number, required: true, max: 99999 }
 }, { timestamps: true });
 
-export default mongoose.model('GamesData', gamesDataSchema);
+export default mongoose.model('gamesdatas', gamesDataSchema);

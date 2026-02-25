@@ -9,4 +9,4 @@ const resortsDataSchema = new mongoose.Schema({
   area: { type: String, required: true, maxlength: 50 }
 }, { timestamps: true });
 
-export default mongoose.model('ResortsData', resortsDataSchema);
+export default mongoose.model('resortsdatas', resortsDataSchema);

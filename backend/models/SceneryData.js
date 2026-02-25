@@ -6,4 +6,4 @@ const sceneryDataSchema = new mongoose.Schema({
   area: { type: String, required: true, maxlength: 30 }
 }, { timestamps: true });
 
-export default mongoose.model('SceneryData', sceneryDataSchema);
+export default mongoose.model('scenerydatas', sceneryDataSchema);

@@ -9,4 +9,4 @@ const restaurantDataSchema = new mongoose.Schema({
   budget: { type: Number, required: true, max: 99999 }
 }, { timestamps: true });
 
-export default mongoose.model('RestaurantData', restaurantDataSchema);
+export default mongoose.model('restaurantdatas', restaurantDataSchema);

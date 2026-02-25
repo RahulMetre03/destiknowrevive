@@ -1,32 +1,34 @@
 // components/LocationGrid.js
 import React from 'react';
 import LocationCard from './LocationCard';
-// import './LocationGrid.css';
 
-const LocationGrid = ({ locations, onLocationClick, loading, error , category }) => {
+const LocationGrid = ({ locations, onLocationClick, loading, error, category }) => {
   if (loading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-        <p>Loading locations...</p>
+        <h3 className="text-gradient">Scanning dimensions...</h3>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="error-container">
-        <p className="error-message">{error}</p>
+      <div className="error-banner" style={{ gridColumn: '1 / -1' }}>
+        <span>Error retrieving coordinates: {error}</span>
       </div>
     );
   }
 
+  if (locations.length === 0) {
+    return null;
+  }
 
   return (
     <div className="location-grid">
       {locations.map((location) => (
         <LocationCard
-        category = {category}
+          category={category}
           key={location.placeId}
           location={location}
           onClick={onLocationClick}

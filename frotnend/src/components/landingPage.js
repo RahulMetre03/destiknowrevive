@@ -1,323 +1,264 @@
-// TravelLandingPage.js
 import React, { useState } from 'react';
-import { Eye, EyeOff, Mountain, Plane, MapPin, Loader2 } from 'lucide-react';
-import './landing.css';
-import apiService from '../services/apiServices';
 import { useNavigate } from 'react-router-dom';
+import { registerUser, checkLogin } from '../services/apiServices';
+import './landing.css';
 
-// API Service
-// const API_BASE_URL = 'http://localhost:5000/api';
-
-
-export default function TravelLandingPage() {
-  const navigate = useNavigate();
-
+const LandingPage = ({ setIsLoggedIn }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     phone: '',
-    password: '',
-    city: ''
+    city: '',
+    password: ''
   });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear message when user starts typing
-    if (message.text) {
-      setMessage({ type: '', text: '' });
-    }
+    setMessage('');
   };
 
-  const validateForm = () => {
-    if (isLogin) {
-      if (!formData.username || !formData.password) {
-        setMessage({ type: 'error', text: 'Please fill in all fields' });
-        return false;
-      }
-    } else {
-      if (!formData.username || !formData.email || !formData.phone || !formData.password || !formData.city) {
-        setMessage({ type: 'error', text: 'Please fill in all fields' });
-        return false;
-      }
-      if (formData.password.length < 6) {
-        setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-    
-    setIsLoading(true);
-    setMessage({ type: '', text: '' });
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    setLoading(true);
+    setMessage('');
 
     try {
       if (isLogin) {
-        // Login logic
-        const loginData = {
+        if (!formData.username || !formData.password) {
+          setError(true);
+          setMessage("Username and password required");
+          setLoading(false);
+          return;
+        }
+
+        const response = await checkLogin({
           username: formData.username,
           password: formData.password
-        };
-        
-        const result = await apiService.checkLogin(loginData);
-        
-        if (result.success) {
-          setMessage({ type: 'success', text: 'Login successful! Welcome back!' });
-          // Handle successful login (redirect, store token, etc.)
-          console.log('Login successful:', result.data);
-          localStorage.setItem('username', result.data.username);
-  localStorage.setItem('name', result.data.name);
-  localStorage.setItem('city', result.data.city);
-          navigate('/explore');
-        } else {
-          setMessage({ type: 'error', text: result.error || 'Login failed. Please try again.' });
+        });
+
+        if (!response.success) {
+          setError(true);
+          setMessage(response.error || "Invalid username or password");
+          setLoading(false);
+          return;
         }
+
+        setError(false);
+        setMessage("Welcome back! Redirecting...");
+        localStorage.setItem("username", formData.username);
+        if (response.data && response.data.city) localStorage.setItem("city", response.data.city);
+        setIsLoggedIn(true);
+        setTimeout(() => navigate('/explore'), 1000);
+
       } else {
-        // Registration logic
-        const registerData = {
-          username: formData.username,
-          email: formData.email,
-          phone: formData.phone,
-          password: formData.password,
-          city: formData.city
-        };
-        
-        const result = await apiService.registerUser(registerData);
-        
-        if (result.success) {
-          setMessage({ type: 'success', text: 'Registration successful! Welcome to our travel community!' });
-          // Handle successful registration
-          console.log('Registration successful:', result.data);
-          // Optionally switch to login form
-          // setIsLogin(true);
-        } else {
-          setMessage({ type: 'error', text: result.error || 'Registration failed. Please try again.' });
+        if (!formData.username || !formData.email || !formData.phone || !formData.city || !formData.password) {
+          setError(true);
+          setMessage("All fields are required");
+          setLoading(false);
+          return;
         }
+
+        const response = await registerUser(formData);
+
+        if (!response.success) {
+          setError(true);
+          setMessage(response.error || "Failed to create account");
+          setLoading(false);
+          return;
+        }
+
+        setError(false);
+        setMessage("Account created! Please log in.");
+        setTimeout(() => {
+          setIsLogin(true);
+          setFormData({ ...formData, password: '' });
+          setMessage('');
+        }, 1500);
       }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
-      console.error('Form submission error:', error);
+    } catch (err) {
+      setError(true);
+      setMessage(err.message || 'Something went wrong');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleToggleMode = () => {
-    setIsLogin(!isLogin);
-    setMessage({ type: '', text: '' });
-    setFormData({
-      username: '',
-      email: '',
-      phone: '',
-      password: '',
-      city: ''
-    });
-  };
-
   return (
-    <div className="travel-container">
-      {/* Animated Background */}
-      <div className="travel-background">
-        <div className="travel-overlay"></div>
-        
-        {/* Floating Elements */}
-        <div className="floating-icon floating-icon-1">
-          <Mountain size={48} />
+    <div className="landing-wrapper">
+      {/* Immersive Background */}
+      <div className="landing-bg-image"></div>
+      <div className="landing-bg-overlay"></div>
+
+      {/* Floating Badges */}
+      <div className="floating-badges">
+        <div className="float-badge badge-1">
+          <div className="icon">📍</div> Explore Pune
         </div>
-        <div className="floating-icon floating-icon-2">
-          <Plane size={40} />
+        <div className="float-badge badge-2">
+          <div className="icon">🌟</div> 4.9 Top Rated
         </div>
-        <div className="floating-icon floating-icon-3">
-          <MapPin size={32} />
-        </div>
-        <div className="floating-icon floating-icon-4">
-          <Mountain size={64} />
-        </div>
-        
-        {/* Animated Particles */}
-        <div className="particles">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
+        <div className="float-badge badge-3">
+          <div className="icon">🍹</div> Nightlife
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="travel-content">
-        {/* Hero Text */}
+      <div className="landing-content">
+
+        {/* Left Side: Hero */}
         <div className="hero-section">
+          <div className="hero-badge">
+            <div className="pulse"></div> Next-Gen Travel
+          </div>
           <h1 className="hero-title">
-            <div className="hero-main-text">
-              Nowhere to go?
-            </div>
-            <div className="hero-sub-text">
-              Know where to go!
-            </div>
+            Discover the <br />
+            <span className="text-gradient">Undiscovered.</span>
           </h1>
           <p className="hero-description">
-            Discover breathtaking destinations and create unforgettable memories with
-          </p>
-          <p className='mainmaintext'>
-          <b>DESTIKNOW</b>
+            Experience the world's most breathtaking locations, immersive
+            adventures, and vibrant nightlife, tailored exactly to your vibe.
           </p>
         </div>
 
-        {/* Login/Register Form */}
-        <div className="form-container">
-          {/* Toggle Buttons */}
-          <div className="toggle-container">
-            <button
-              onClick={() => !isLoading && handleToggleMode()}
-              disabled={isLoading}
-              className={`toggle-button ${isLogin ? 'toggle-active-login' : 'toggle-inactive'}`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => !isLoading && handleToggleMode()}
-              disabled={isLoading}
-              className={`toggle-button ${!isLogin ? 'toggle-active-register' : 'toggle-inactive'}`}
-            >
-              Register
-            </button>
-          </div>
+        {/* Right Side: Glass Auth Form */}
+        <div className="auth-container">
+          <div className="auth-card glass-panel">
 
-          {/* Message Display */}
-          {message.text && (
-            <div className={`message-box ${message.type === 'success' ? 'message-success' : 'message-error'}`}>
-              {message.text}
-            </div>
-          )}
-
-          {/* Form Fields */}
-          <div className="form-fields">
-            {/* Username/Email for Login */}
-            {isLogin ? (
-              <div className="input-container">
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username or Email"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  className="form-input"
-                />
-              </div>
-            ) : (
-              <>
-                {/* Registration Fields */}
-                <div className="input-container">
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
-                </div>
-                <div className="input-container">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email Address"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
-                </div>
-                <div className="input-container">
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone Number"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
-                </div>
-                <div className="input-container">
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Password Field */}
-            <div className="input-container password-container">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="form-input password-input"
-              />
+            <div className="auth-toggle" data-active={isLogin ? 'login' : 'register'}>
+              <div className="toggle-highlighter"></div>
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
+                className={`toggle-btn ${isLogin ? 'active' : ''}`}
+                onClick={() => { setIsLogin(true); setMessage(''); }}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                Sign In
+              </button>
+              <button
+                type="button"
+                className={`toggle-btn ${!isLogin ? 'active' : ''}`}
+                onClick={() => { setIsLogin(false); setMessage(''); }}
+              >
+                Create Account
               </button>
             </div>
 
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className={`submit-button ${isLogin ? 'submit-login' : 'submit-register'} ${isLoading ? 'submit-disabled' : ''}`}
-            >
-              {isLoading ? (
+            {message && (
+              <div className={`auth-message ${error ? 'error' : 'success'}`}>
+                {error ? '⚠️' : '✨'} {message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              {/* Login Fields */}
+              {isLogin ? (
                 <>
-                  <Loader2 size={20} className="loading-spinner" />
-                  {isLogin ? 'Logging in...' : 'Creating Account...'}
+                  <div className="input-group stagger-1">
+                    <input
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className="auth-input"
+                      autoComplete="username"
+                    />
+                  </div>
                 </>
               ) : (
-                isLogin ? 'Start Your Journey' : 'Join the Adventure'
+                /* Register Fields */
+                <>
+                  <div className="input-group stagger-1">
+                    <input
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className="auth-input"
+                      autoComplete="username"
+                    />
+                  </div>
+                  <div className="input-group stagger-2">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="auth-input"
+                      autoComplete="email"
+                    />
+                  </div>
+                  <div className="input-group stagger-3">
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="auth-input"
+                      autoComplete="tel"
+                    />
+                  </div>
+                  <div className="input-group stagger-4">
+                    <input
+                      type="text"
+                      name="city"
+                      placeholder="City"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className="auth-input"
+                      autoComplete="address-level2"
+                    />
+                  </div>
+                </>
               )}
-            </button>
-          </div>
 
-          {/* Additional Links */}
-          {isLogin && (
-            <div className="forgot-password">
-              <button className="forgot-password-link">
-                Forgot your password?
+              {/* Shared Password Field */}
+              <div className={`input-group ${isLogin ? 'stagger-2' : 'stagger-5'}`}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="auth-input"
+                  autoComplete={isLogin ? "current-password" : "new-password"}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}
+                >
+                  {showPassword ? '👁️' : '🙈'}
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                className={`auth-submit ${!isLogin ? 'register-mode' : ''} stagger-5`}
+                disabled={loading}
+              >
+                {loading ? 'Accessing...' : (isLogin ? 'Enter' : 'Join Now')}
               </button>
-            </div>
-          )}
+            </form>
+
+          </div>
         </div>
 
-        {/* Footer Text */}
-        <div className="footer-text">
-          <p>Your next adventure awaits • Explore • Dream • Discover</p>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default LandingPage;

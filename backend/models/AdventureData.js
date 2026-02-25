@@ -8,4 +8,4 @@ const adventureDataSchema = new mongoose.Schema({
   budget: { type: Number, required: true, max: 99999 }
 }, { timestamps: true });
 
-export default mongoose.model('AdventureData', adventureDataSchema);
+export default mongoose.model('adventuredatas', adventureDataSchema);

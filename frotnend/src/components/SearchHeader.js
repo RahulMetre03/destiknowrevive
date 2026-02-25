@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-// import './SearchHeader.css';
 import Capture from './Capture.png';
 
 const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const username = localStorage.getItem('username');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,25 +12,19 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
     }
   };
 
-  const handleCityChange = (e) => {
-    const city = e.target.value;
-    setCurrentCity(city);
-    // Note: localStorage is not available in Claude artifacts
-    // localStorage.setItem('city', city);
-  };
-
   return (
     <div className="header">
       <a href="/" className="logo">
-        <img src={Capture} alt="Logo" />
+        <img src={Capture} alt="DESTIKNOW Logo" />
       </a>
-      
+
       <form onSubmit={handleSubmit} className="search-form">
         <input
           type="text"
-          placeholder="Enter city"
+          placeholder="Where are you? (City)"
           value={currentCity}
-          onChange={handleCityChange}
+          onChange={(e) => setCurrentCity(e.target.value)}
+          autoComplete="address-level2"
           className="city-input"
           disabled={loading}
         />
@@ -38,18 +32,23 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter what your mind says"
+          placeholder="Search for restaurants, games, resorts..."
+          autoComplete="off"
           className="search-input"
           disabled={loading}
         />
-        <button 
+        <button
           type="submit"
           className="search-btn"
-          disabled={loading || !searchTerm.trim()}
+          disabled={loading || !searchTerm.trim() || !currentCity.trim()}
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? 'Searching...' : 'Explore Now'}
         </button>
       </form>
+
+      <div className="greeting">
+        User <strong>{username || 'Guest'}</strong>
+      </div>
     </div>
   );
 };

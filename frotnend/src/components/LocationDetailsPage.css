@@ -1,43 +1,277 @@
-.details-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-  background-color: #f9f9f9;
+/* =============================================
+   DESTIKNOW NEXT-GEN — Location Details Page
+   ============================================= */
+
+.details-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  padding: 20px 24px;
-  margin-bottom: 24px;
-  transition: box-shadow 0.2s ease;
+/* Hero Header Sector */
+.details-hero {
+  position: relative;
+  padding: 6rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 350px;
+  z-index: 10;
+  overflow: hidden;
+  animation: fadeDown 0.8s var(--ease-out-expo);
 }
 
-.card:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+.details-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.2) 0%, transparent 60%);
+  z-index: -1;
 }
 
-.card h2, .card h3 {
-  margin-top: 0;
-  color: #2a2a2a;
+.hero-glass-overlay {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.description {
-  font-size: 1rem;
-  color: #555;
+.back-btn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 20;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.details-title {
+  font-size: clamp(3rem, 6vw, 5rem);
+  color: #fff;
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.details-category-badge {
+  align-self: flex-start;
   margin-bottom: 16px;
+  padding: 8px 16px;
+  background: var(--gradient-cosmic);
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  z-index: 2;
 }
 
-.info-grid {
+/* Details Content Layout */
+.details-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  row-gap: 12px;
-  column-gap: 20px;
+  grid-template-columns: 1fr 400px;
+  gap: 3rem;
+  animation: fadeUp 1s var(--ease-out-expo) 0.3s forwards;
+  opacity: 0;
 }
 
-.info-grid div {
+/* Left Column: Story/Description */
+.details-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.overview-card,
+.data-card {
+  padding: 2.5rem;
+  background: rgba(24, 24, 27, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-aurora);
+}
+
+.data-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-cosmic);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.description-text {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Location Mini-Tags */
+.location-tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.loc-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-weight: 500;
   font-size: 0.95rem;
+}
+
+.loc-tag i {
+  color: var(--neon-teal);
+}
+
+/* Right Column: Key Data Visualizations */
+.details-sidebar {
+  position: sticky;
+  top: 120px;
+}
+
+.telemetry-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.telemetry-item {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.telemetry-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.tel-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.tel-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+.tel-value.highlight {
+  color: var(--neon-teal);
+}
+
+/* Empty State */
+.empty-portal {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.portal-msg {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .details-container {
+    grid-template-columns: 1fr;
+  }
+
+  .details-sidebar {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .details-hero {
+    padding: 5rem 1.5rem 2rem;
+    min-height: 250px;
+  }
+
+  .details-title {
+    font-size: 2.2rem;
+  }
+
+  .details-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .overview-card,
+  .data-card {
+    padding: 1.5rem;
+  }
 }

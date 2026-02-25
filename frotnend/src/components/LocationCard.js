@@ -1,149 +1,101 @@
-// components/LocationCard.js
 import React, { useState } from 'react';
-import './locationcard.css';
-import LocationDetailsPage from './LocationDetailsPage';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './locationcard.css';
 
-const LocationCard = ({ location, category }) => {
+const LocationCard = ({ location, category, index }) => {
+  const [showDetails, setShowDetails] = useState(false);
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showDetails, setShowDetails] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Create stagger class based on index (cycles 1-5)
+  const staggerClass = `stagger-${(index % 5) + 1}`;
 
   const fetchDetails = async () => {
-    if (!location?.placeId || !category) return;
-
     setLoading(true);
     setError(null);
-
     try {
-      console.log('Calling API for:', location.placeName);
-
-      const response = await fetch('https://destiknowrevive.onrender.com/api/locations/get-details', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tablename: category,
-          placeId: location.placeId,
-        }),
+      const response = await axios.post('http://localhost:5000/api/locations/get-details', {
+        tablename: category,
+        placeId: location.placeId
       });
-
-      const data = await response.json();
-      console.log('API response:', data);
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch details');
-      }
-
-      setDetails(data);
+      setDetails(response.data);
       setShowDetails(true);
-    } catch (error) {
-      console.error('Fetch error:', error);
-      setError(error.message);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch details');
     } finally {
       setLoading(false);
     }
   };
 
   const handleToggleDetails = () => {
-    if (!details) {
-      // If no details loaded, fetch them
+    if (!showDetails && !details) {
       fetchDetails();
-    } else if (showDetails) {
-      // If details are showing, hide them
-      setShowDetails(false);
     } else {
-      // If details are loaded but hidden, show them
-      setShowDetails(true);
+      setShowDetails(!showDetails);
     }
   };
 
-  const navigate = useNavigate();
-
-  const goToDetails = (loc) => {
-    navigate('/details', {
-      state: {
-        location: loc,
-        details: details
-      }
-    });
+  const handleGoToDetails = () => {
+    navigate('/details', { state: { location, details } });
   };
 
-  const handleClearDetails = () => {
-    setDetails(null);
-    setShowDetails(false);
-    setError(null);
-  };
-
-  const getButtonText = () => {
-    if (loading) return 'Loading...';
-    if (!details) return 'Read More';
-    return showDetails ? 'Hide Details' : 'Show Details';
-  };
-
+  // Format keys dynamically
   const formatKey = (key) => {
-    return key
-      .replace(/([A-Z])/g, ' $1') // add space before capital letters
-      .replace(/^./, str => str.toUpperCase()); // capitalize first letter
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
   };
+
+  const excludedKeys = ['_id', '__v', 'placeId', 'createdAt', 'updatedAt'];
 
   return (
-    <div className="card">
+    <div className={`card ${showDetails ? 'expanded' : ''} ${staggerClass}`}>
       <div className="card-content">
+        <div className="card-badge">{location.categoryName}</div>
         <h3 className="card-title">{location.placeName}</h3>
-        <p className="card-category">{location.categoryName}</p>
-        
-        {/* Button Container */}
-        <div className="button-container">
-          {/* Toggle Details Button */}
-          <button onClick={handleToggleDetails} disabled={loading}>
-            {getButtonText()}
+
+        <div className="card-actions">
+          <button
+            className="btn-primary"
+            onClick={handleToggleDetails}
+            disabled={loading}
+          >
+            {loading ? 'Decrypting...' : (showDetails ? 'Close Data' : 'Preview')}
           </button>
-
-          {/* Go to Details Page Button - only show when details are loaded */}
-          {details && showDetails && (
-            <button onClick={() => goToDetails(location)}>
-              Go to Details Page
-            </button>
-          )}
-
-          {/* Clear Button - only show when details are loaded */}
-          {details && (
-            <button 
-              className="clear-btn" 
-              onClick={handleClearDetails}
-              title="Clear details"
-            >
-              ✕
-            </button>
-          )}
+          <button
+            className="btn-secondary"
+            onClick={handleGoToDetails}
+          >
+            Enter Portal →
+          </button>
         </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="error-section">
-            <p className="error-text">Error: {error}</p>
+        {error && <p className="error-text">System Error: {error}</p>}
+
+        <div className="card-details-wrapper">
+          <div className="card-details-content">
+            {details && (
+              <div className="details-grid">
+                {Object.entries(details)
+                  .filter(([key]) => !excludedKeys.includes(key))
+                  .slice(0, 4) // Only show a quick preview of 4 items
+                  .map(([key, value]) => (
+                    <div className="detail-item" key={key}>
+                      <span className="detail-label">{formatKey(key)}</span>
+                      <span className="detail-value">
+                        {typeof value === 'number' && ['budget', 'price'].includes(key.toLowerCase())
+                          ? `₹${value.toLocaleString()}`
+                          : String(value)}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
-        )}
-
-        {/* Details Display */}
-        <div className={`card-details-container ${details && showDetails ? 'expanded' : ''}`}>
-          {details && showDetails && (
-            <div className="card-details">
-              {Object.entries(details).map(([key, value]) => {
-                if (key === '_id' || key === 'placeId') return null; // Skip these keys
-
-                return (
-                  <p key={key}>
-                    <strong>{formatKey(key)}:</strong> {String(value)}
-                  </p>
-                );
-              })}
-            </div>
-          )}
         </div>
+
       </div>
     </div>
   );

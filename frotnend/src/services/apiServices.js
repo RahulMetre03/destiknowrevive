@@ -1,5 +1,5 @@
 // services/apiService.js
-const API_BASE_URL = 'https://destiknowrevive.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 class ApiService {
   // Generic request handler
@@ -15,18 +15,18 @@ class ApiService {
       };
 
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
       console.error(`API Error (${endpoint}):`, error);
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.message || 'Network error occurred'
       };
     }
@@ -79,7 +79,7 @@ class ApiService {
   // Get location by ID
   async getLocationById(id) {
     return this.makeRequest(`/locations/${id}`);
-  } 
+  }
 
 }
 
@@ -88,7 +88,7 @@ const apiService = new ApiService();
 export default apiService;
 
 // Named exports for specific methods if needed
-export const { 
-  checkLogin, 
-  registerUser , searchLocations , applyFilters , getCategories ,getLocationById
+export const {
+  checkLogin,
+  registerUser, searchLocations, applyFilters, getCategories, getLocationById
 } = apiService;
