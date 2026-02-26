@@ -20,7 +20,7 @@ const LocationCard = ({ location, category, index }) => {
     try {
       const response = await axios.post('http://localhost:5000/api/locations/get-details', {
         tablename: category,
-        locationId: location.locationId
+        locationId: location._id
       });
       setDetails(response.data);
       setShowDetails(true);
@@ -39,8 +39,25 @@ const LocationCard = ({ location, category, index }) => {
     }
   };
 
-  const handleGoToDetails = () => {
-    navigate('/details', { state: { location, details } });
+  const handleGoToDetails = async () => {
+    if (!details) {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.post('http://localhost:5000/api/locations/get-details', {
+          tablename: category,
+          locationId: location._id
+        });
+        setDetails(response.data);
+        navigate('/details', { state: { location, details: response.data } });
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch details');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      navigate('/details', { state: { location, details } });
+    }
   };
 
   // Format keys dynamically
@@ -51,7 +68,14 @@ const LocationCard = ({ location, category, index }) => {
   const excludedKeys = ['_id', '__v', 'locationId', 'createdAt', 'updatedAt'];
 
   return (
-    <div className={`card ${showDetails ? 'expanded' : ''} ${staggerClass}`}>
+    <div
+      className={`card ${showDetails ? 'expanded' : ''} ${staggerClass}`}
+      style={
+        location.images && location.images.length > 0
+          ? { backgroundImage: `url(${location.images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+          : {}
+      }
+    >
       <div className="card-content">
         <div className="card-badge">{location.categoryName}</div>
         <h3 className="card-title">{location.placeName}</h3>

@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  background: inherit;
+  background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 30%, rgba(10, 10, 15, 0.6) 100%);
   z-index: 2;
 }
 
