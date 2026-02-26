@@ -4,12 +4,12 @@ import "./admin.css";
 
 const AdminPage = () => {
   const [categories, setCategories] = useState([
-  "adventure",
-  "resorts",
-  "scenery",
-  "games",
-  "restaurant"
-]);
+    "adventure",
+    "resorts",
+    "scenery",
+    "games",
+    "restaurant"
+  ]);
   const [filters, setFilters] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [baseData, setBaseData] = useState({
@@ -25,17 +25,17 @@ const AdminPage = () => {
   const [message, setMessage] = useState("");
   const [images, setImages] = useState([]);
 
-//   useEffect(() => {
-//     axios.get("http://localhost:5000/api/locations/categories")
-//       .then(res => setCategories(res.data.categories))
-//       .catch(err => console.error(err));
-//   }, []);
+  //   useEffect(() => {
+  //     axios.get("https://destiknowrevive.onrender.com/api/locations/categories")
+  //       .then(res => setCategories(res.data.categories))
+  //       .catch(err => console.error(err));
+  //   }, []);
 
   const handleCategoryChange = async (e) => {
     const category = e.target.value;
     setSelectedCategory(category);
 
-    const res = await axios.get(`http://localhost:5000/api/locations/filters/${category}`);
+    const res = await axios.get(`https://destiknowrevive.onrender.com/api/locations/filters/${category}`);
     setFilters(res.data.filters);
 
     // Reset dynamic fields
@@ -47,7 +47,7 @@ const AdminPage = () => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
-  //   await axios.post("http://localhost:5000/api/locations/add-location", {
+  //   await axios.post("https://destiknowrevive.onrender.com/api/locations/add-location", {
   //     baseData: {
   //       ...baseData,
   //       categoryName: selectedCategory
@@ -59,35 +59,35 @@ const AdminPage = () => {
   // };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formData = new FormData();
+    const formData = new FormData();
 
-  // Add baseData
-  Object.keys(baseData).forEach(key => {
-    formData.append(key, baseData[key]);
-  });
+    // Add baseData
+    Object.keys(baseData).forEach(key => {
+      formData.append(key, baseData[key]);
+    });
 
-  formData.append("categoryName", selectedCategory);
+    formData.append("categoryName", selectedCategory);
 
-  // Add categoryData
-  formData.append("categoryData", JSON.stringify(categoryData));
+    // Add categoryData
+    formData.append("categoryData", JSON.stringify(categoryData));
 
-  // Add images
-  for (let i = 0; i < images.length; i++) {
-    formData.append("images", images[i]);
-  }
-
-  await axios.post(
-    "http://localhost:5000/api/locations/add-location",
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" }
+    // Add images
+    for (let i = 0; i < images.length; i++) {
+      formData.append("images", images[i]);
     }
-  );
 
-  setMessage("✨ Location Added Successfully");
-};
+    await axios.post(
+      "https://destiknowrevive.onrender.com/api/locations/add-location",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" }
+      }
+    );
+
+    setMessage("✨ Location Added Successfully");
+  };
 
   return (
     <div className="admin-wrapper">
@@ -113,40 +113,40 @@ const AdminPage = () => {
           <input
             className="admin-input"
             placeholder="Place Name"
-            onChange={(e) => setBaseData({...baseData, placeName: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, placeName: e.target.value })}
             required
           />
           <textarea
             className="admin-input"
             placeholder="Description"
-            onChange={(e) => setBaseData({...baseData, description: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, description: e.target.value })}
             required
           />
           <input
             className="admin-input"
             placeholder="City"
-            onChange={(e) => setBaseData({...baseData, city: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, city: e.target.value })}
           />
           <input
             className="admin-input"
             placeholder="State"
-            onChange={(e) => setBaseData({...baseData, state: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, state: e.target.value })}
           />
           <input
             className="admin-input"
             placeholder="Country"
-            onChange={(e) => setBaseData({...baseData, country: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, country: e.target.value })}
           />
           <input
             className="admin-input"
             placeholder="Category ID"
             type="number"
-            onChange={(e) => setBaseData({...baseData, categoryId: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, categoryId: e.target.value })}
           />
           <input
             className="admin-input"
             placeholder="Google Maps Link"
-            onChange={(e) => setBaseData({...baseData, locationUrl: e.target.value})}
+            onChange={(e) => setBaseData({ ...baseData, locationUrl: e.target.value })}
           />
 
           {/* DYNAMIC FILTER FIELDS */}
@@ -156,17 +156,17 @@ const AdminPage = () => {
               className="admin-input"
               placeholder={filter}
               onChange={(e) =>
-                setCategoryData({...categoryData, [filter]: e.target.value})
+                setCategoryData({ ...categoryData, [filter]: e.target.value })
               }
             />
           ))}
 
           <input
-          type="file"
-          multiple
-          className="admin-input"
-          onChange={(e) => setImages(e.target.files)}
-        />
+            type="file"
+            multiple
+            className="admin-input"
+            onChange={(e) => setImages(e.target.files)}
+          />
 
           <button className="admin-submit">
             Add Location

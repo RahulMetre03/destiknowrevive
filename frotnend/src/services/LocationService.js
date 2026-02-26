@@ -5,17 +5,17 @@ const BASE_URL = 'https://destiknowrevive.onrender.com/api';
 
 export class LocationService {
   // Search for locations
-  static async searchLocations(searchTerm,city) {
+  static async searchLocations(searchTerm, city) {
     try {
-      const res = await axios.post(`${BASE_URL}/locations/search`, { 
-        search: searchTerm ,
-        city : city
+      const res = await axios.post(`${BASE_URL}/locations/search`, {
+        search: searchTerm,
+        city: city
       });
-      
+
       // Log the full response to debug
       console.log('Axios response:', res);
       console.log('Response data:', res.data);
-      
+
       // Return the response data
       return res.data;
     } catch (error) {
@@ -25,36 +25,36 @@ export class LocationService {
   }
 
   // Apply filters
-  static async applyFilters(category, filters,city) {
-  try {
-    if (!category) {
-      throw new Error('Category is required');
-    }
-
-    // Clean filters
-    const cleanFilters = Object.keys(filters).reduce((acc, key) => {
-      if (filters[key] && filters[key].trim() !== '') {
-        acc[key] = filters[key].trim();
+  static async applyFilters(category, filters, city) {
+    try {
+      if (!category) {
+        throw new Error('Category is required');
       }
-      return acc;
-    }, {});
 
-    const res = await axios.post(`${BASE_URL}/locations/filter`, {
-      category,
-      filters: cleanFilters,
-       city : city
-    });
+      // Clean filters
+      const cleanFilters = Object.keys(filters).reduce((acc, key) => {
+        if (filters[key] && filters[key].trim() !== '') {
+          acc[key] = filters[key].trim();
+        }
+        return acc;
+      }, {});
 
-    // Debug logs
-    console.log('Axios response (applyFilters):', res);
-    console.log('Response data (applyFilters):', res.data);
+      const res = await axios.post(`${BASE_URL}/locations/filter`, {
+        category,
+        filters: cleanFilters,
+        city: city
+      });
 
-    return res.data;
-  } catch (error) {
-    console.error('LocationService.applyFilters error:', error);
-    throw new Error(error.response?.data?.message || 'Failed to apply filters');
+      // Debug logs
+      console.log('Axios response (applyFilters):', res);
+      console.log('Response data (applyFilters):', res.data);
+
+      return res.data;
+    } catch (error) {
+      console.error('LocationService.applyFilters error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to apply filters');
+    }
   }
-}
 
   // Get all categories
   static async getCategories() {
@@ -72,7 +72,7 @@ export class LocationService {
       if (!id) {
         throw new Error('Location ID is required');
       }
-      
+
       return await ApiService.getLocationById(id);
     } catch (error) {
       console.error('Get location details error:', error);
@@ -83,14 +83,14 @@ export class LocationService {
   // Validate filter input based on type
   static validateFilterInput(filterName, value) {
     const numericFilters = ['budget', 'price', 'numberallowed', 'people'];
-    
+
     if (numericFilters.includes(filterName.toLowerCase())) {
       const numValue = parseInt(value);
       if (isNaN(numValue) || numValue < 0) {
         return false;
       }
     }
-    
+
     return value && value.trim().length > 0;
   }
 
@@ -103,23 +103,23 @@ export class LocationService {
   }
 
   static LocationService = {
-  getDetails: async ({ tablename, locationId }) => {
-    console.log('Calling getDetails with:', { tablename, locationId });
+    getDetails: async ({ tablename, locationId }) => {
+      console.log('Calling getDetails with:', { tablename, locationId });
 
-    try {
-      const response = await axios.post('/api/get-details', {
-        tablename,
-        locationId,
-      });
+      try {
+        const response = await axios.post('/api/get-details', {
+          tablename,
+          locationId,
+        });
 
-      console.log('getDetails response:', response.data);
-      return response.data; // ✅ return only the data
-    } catch (error) {
-      console.error('Error in LocationService.getDetails:', error);
-      throw error;
+        console.log('getDetails response:', response.data);
+        return response.data; // ✅ return only the data
+      } catch (error) {
+        console.error('Error in LocationService.getDetails:', error);
+        throw error;
+      }
     }
-  }
-};
+  };
 }
 
 export default LocationService;
