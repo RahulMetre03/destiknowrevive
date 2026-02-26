@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 
 const resortsDataSchema = new mongoose.Schema({
-  placeId: { type: Number, required: true, unique: true },
+  locationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true,
+    unique: true
+  },
   type: { type: String, required: true, maxlength: 25 },
   people: { type: Number, required: true, max: 999 },
   price: { type: Number, required: true, max: 99999 },

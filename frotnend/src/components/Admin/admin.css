@@ -1,0 +1,56 @@
+.admin-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.admin-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 40px;
+  animation: fadeUp 0.8s var(--ease-out-expo);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.admin-input {
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: all 0.3s var(--ease-fluid);
+}
+
+.admin-input:focus {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+.admin-submit {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-cosmic);
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.admin-submit:hover {
+  transform: translateY(-4px);
+}
+
+.admin-message {
+  margin-top: 20px;
+  color: var(--neon-teal);
+}

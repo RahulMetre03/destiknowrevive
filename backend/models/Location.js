@@ -8,7 +8,13 @@ const locationSchema = new mongoose.Schema({
   country : {type:String},
   categoryName: { type: String, required: true, maxlength: 25 },
   categoryId: { type: Number, required: true },
-  placeId: { type: Number, required: true, unique: true }
+  locationUrl : {type: String, required: true},
+  images: [
+  {
+    type: String,
+    required: true
+  }
+]
 }, { timestamps: true });
 
 export const Location = mongoose.model('Location', locationSchema);

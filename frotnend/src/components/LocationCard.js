@@ -18,9 +18,9 @@ const LocationCard = ({ location, category, index }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('https://destiknowrevive.onrender.com/api/locations/get-details', {
+      const response = await axios.post('http://localhost:5000/api/locations/get-details', {
         tablename: category,
-        placeId: location.placeId
+        locationId: location.locationId
       });
       setDetails(response.data);
       setShowDetails(true);
@@ -48,7 +48,7 @@ const LocationCard = ({ location, category, index }) => {
     return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
   };
 
-  const excludedKeys = ['_id', '__v', 'placeId', 'createdAt', 'updatedAt'];
+  const excludedKeys = ['_id', '__v', 'locationId', 'createdAt', 'updatedAt'];
 
   return (
     <div className={`card ${showDetails ? 'expanded' : ''} ${staggerClass}`}>

@@ -4,10 +4,23 @@ import {
   applyFilters,
   getCategories,
   getLocationById , 
-  getDetails 
+  getDetails,
+  getFiltersByCategory 
 } from '../controller/locationController.js';
+import { addLocation } from '../controller/adminController.js';
+import multer from "multer";
+
+const upload = multer({ dest: "uploads/" });
 
 const router = express.Router();
+
+router.post(
+  '/add-location',
+  upload.array('images', 6),
+  addLocation
+);
+
+router.get('/filters/:categoryName', getFiltersByCategory);
 
 // @route   POST /api/locations/search
 // @desc    Search locations by category

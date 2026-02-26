@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
 
+
 const adventureDataSchema = new mongoose.Schema({
-  placeId: { type: Number, required: true, unique: true },
+  locationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true,
+    unique: true
+  },
   type: { type: String, required: true, maxlength: 25 },
   area: { type: String, required: true, maxlength: 30 },
   numberAllowed: { type: Number, default: null },

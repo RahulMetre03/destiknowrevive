@@ -27,6 +27,8 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+console.log("Cloud name:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("Cloud URL:", process.env.CLOUDINARY_URL);
 
 
 

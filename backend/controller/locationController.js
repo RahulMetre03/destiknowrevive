@@ -1,10 +1,10 @@
 import { Location } from '../models/Location.js';
+import Filters from '../models/Filters.js';
 import RestaurantData from '../models/RestaurantData.js';
 import AdventureData from '../models/AdventureData.js';
 import SceneryData from '../models/SceneryData.js';
 import ResortsData from '../models/ResortsData.js';
 import GamesData from '../models/GamesData.js';
-import Filters from '../models/Filters.js';
 import mongoose from 'mongoose';
 
 // Search locations by category
@@ -89,14 +89,14 @@ export const applyFilters = async (req, res) => {
     });
 
     const matchingData = await DataModel.find(filterQuery);
-    const placeIds = matchingData.map(item => item.placeId);
+    const locationIds = matchingData.map(item => item.locationId);
 
-    if (placeIds.length === 0) {
+    if (locationIds.length === 0) {
       return res.status(404).json({ message: 'No matching places found with applied filters' });
     }
 
     const locations = await Location.find({
-      placeId: { $in: placeIds },
+      locationId: { $in: locationIds },
       city: { $regex: `^${city}$`, $options: 'i' }
     });
 
@@ -124,11 +124,11 @@ export const getCategories = async (req, res) => {
   }
 };
 
-// Get single location details by placeId
+// Get single location details by locationId
 export const getLocationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const location = await Location.findOne({ placeId: parseInt(id) });
+    const location = await Location.findOne({ locationId: parseInt(id) });
 
     if (!location) {
       return res.status(404).json({ message: 'Location not found' });
@@ -149,10 +149,10 @@ export const getLocationById = async (req, res) => {
 
 export const getDetails = async (req, res) => {
   try {
-    const { tablename, placeId } = req.body;
+    const { tablename, locationId } = req.body;
 
-    if (!tablename || !placeId) {
-      return res.status(400).json({ message: 'tablename and placeId are required' });
+    if (!tablename || !locationId) {
+      return res.status(400).json({ message: 'tablename and locationId are required' });
     }
 
     const tableNameFinal = tablename.charAt(0).toLowerCase() + tablename.slice(1).toLowerCase() + 'datas';
@@ -166,10 +166,10 @@ export const getDetails = async (req, res) => {
 
     console.log(tableNameFinal);
 
-    const details = await Model.findOne({ placeId });
+    const details = await Model.findOne({ locationId });
 
     if (!details) {
-      return res.status(404).json({ message: 'No details found for the given placeId.' });
+      return res.status(404).json({ message: 'No details found for the given locationId.' });
     }
 
     res.json(details);
@@ -179,3 +179,39 @@ export const getDetails = async (req, res) => {
   }
 };
 
+export const getFiltersByCategory = async (req, res) => {
+  try {
+    const { categoryName } = req.params;
+
+    if (!categoryName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category name is required'
+      });
+    }
+
+    const filtersDoc = await Filters.findOne({
+      category: categoryName.toLowerCase()
+    });
+
+    if (!filtersDoc) {
+      return res.status(404).json({
+        success: false,
+        message: 'Category not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      category: filtersDoc.category,
+      filters: filtersDoc.filters
+    });
+
+  } catch (error) {
+    console.error('Get filters error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};

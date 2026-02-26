@@ -38,11 +38,11 @@ const Explore = () => {
     setLoading(true);
     setError(null);
     try {
-      const placeIds = locations.map(loc => loc.placeId);
+      const locationIds = locations.map(loc => loc.locationId);
       const data = await LocationService.applyFilters(
         filterValues,
         currentCategory,
-        placeIds,
+        locationIds,
         currentCity
       );
 

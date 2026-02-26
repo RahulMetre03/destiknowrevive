@@ -29,7 +29,7 @@ const LocationGrid = ({ locations, onLocationClick, loading, error, category }) 
       {locations.map((location) => (
         <LocationCard
           category={category}
-          key={location.placeId}
+          key={location.locationId}
           location={location}
           onClick={onLocationClick}
         />

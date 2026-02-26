@@ -5,7 +5,7 @@ const locationSchema = new mongoose.Schema({
   categoryName: { type: String, required: true, maxlength: 25 },
   image: { type: Buffer, required: true },
   categoryId: { type: Number, required: true },
-  placeId: { type: Number, required: true, unique: true }
+  locationId: { type: Number, required: true, unique: true }
 }, { timestamps: true });
 
 export default mongoose.model('Location', locationSchema);

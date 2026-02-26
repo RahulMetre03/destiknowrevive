@@ -1,7 +1,7 @@
 // services/locationService.js
 import ApiService from './apiServices.js';
 import axios from 'axios';
-const BASE_URL = 'https://destiknowrevive.onrender.com/api';
+const BASE_URL = 'http://localhost:5000/api';
 
 export class LocationService {
   // Search for locations
@@ -103,13 +103,13 @@ export class LocationService {
   }
 
   static LocationService = {
-  getDetails: async ({ tablename, placeId }) => {
-    console.log('Calling getDetails with:', { tablename, placeId });
+  getDetails: async ({ tablename, locationId }) => {
+    console.log('Calling getDetails with:', { tablename, locationId });
 
     try {
       const response = await axios.post('/api/get-details', {
         tablename,
-        placeId,
+        locationId,
       });
 
       console.log('getDetails response:', response.data);

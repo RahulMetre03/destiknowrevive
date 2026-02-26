@@ -9,7 +9,7 @@ const LocationDetailsPage = () => {
   const handleback = () => navigate('/explore');
 
   const formatKey = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-  const excludedKeys = ['_id', '__v', 'placeId', 'createdAt', 'updatedAt'];
+  const excludedKeys = ['_id', '__v', 'locationId', 'createdAt', 'updatedAt'];
 
   if (!location) {
     return (
@@ -25,7 +25,17 @@ const LocationDetailsPage = () => {
   return (
     <div className="details-page">
       {/* Immersive Hero Header */}
-      <header className="details-hero">
+      <header
+  className="details-hero"
+  style={{
+    backgroundImage: location.images?.[0]
+      ? `url(${location.images[0]})`
+      : "none",
+    backgroundSize: "cover",
+    backgroundPosition: "center"
+  }}
+>
+        
         <div className="hero-glass-overlay"></div>
         <button onClick={handleback} className="back-btn">
           ← Back to Map

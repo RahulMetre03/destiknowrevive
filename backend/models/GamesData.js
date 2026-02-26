@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 
 const gamesDataSchema = new mongoose.Schema({
-  placeId: { type: Number, required: true, unique: true },
+  locationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
+    required: true,
+    unique: true
+  },
   sport: { type: String, required: true, maxlength: 25 },
   area: { type: String, required: true, maxlength: 30 },
   type: { type: String, required: true, maxlength: 30 },
