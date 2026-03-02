@@ -1,0 +1,554 @@
+[
+  {
+    "category": "restaurant",
+    "filters": [
+      {
+        "name": "cuisine",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "North Indian",
+          "South Indian",
+          "Chinese",
+          "Italian",
+          "Continental",
+          "Mexican",
+          "Japanese",
+          "Thai",
+          "Mediterranean",
+          "Mughlai",
+          "Street Food",
+          "Fusion",
+          "Seafood",
+          "Bengali",
+          "Rajasthani",
+          "Gujarati",
+          "Korean",
+          "Lebanese"
+        ]
+      },
+      {
+        "name": "ambience",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Live Music",
+          "Rooftop",
+          "Candlelight",
+          "Outdoor Seating",
+          "Cozy Cafe",
+          "Fine Dining",
+          "Casual Dining",
+          "Themed",
+          "Poolside",
+          "Garden",
+          "Lounge",
+          "Sports Bar",
+          "Family Friendly",
+          "Pet Friendly",
+          "Beachside"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Indoor",
+          "Outdoor",
+          "Rooftop",
+          "Terrace",
+          "Poolside",
+          "Garden",
+          "Beachfront"
+        ]
+      },
+      {
+        "name": "numberAllowed",
+        "type": "number",
+        "placeholder": "Max group size"
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "adventure",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Trekking",
+          "Camping",
+          "Paragliding",
+          "Bungee Jumping",
+          "River Rafting",
+          "Zip Lining",
+          "Scuba Diving",
+          "Snorkeling",
+          "Rock Climbing",
+          "Mountain Biking",
+          "Kayaking",
+          "Skydiving",
+          "Caving",
+          "ATV Riding",
+          "Surfing",
+          "Jet Skiing",
+          "Hot Air Balloon"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Mountains",
+          "Forest",
+          "Desert",
+          "Beach",
+          "River",
+          "Lake",
+          "Canyon",
+          "Urban",
+          "Underground",
+          "Coastal"
+        ]
+      },
+      {
+        "name": "numberAllowed",
+        "type": "number",
+        "placeholder": "Max group size"
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "scenery",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Waterfall",
+          "Valley",
+          "Hill Station",
+          "Lake",
+          "Beach",
+          "Forest",
+          "Desert",
+          "River",
+          "Garden",
+          "Island",
+          "Cliff",
+          "Sunset Point",
+          "Viewpoint",
+          "Heritage Site",
+          "Wildlife Sanctuary",
+          "National Park"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Mountains",
+          "Coastal",
+          "Plains",
+          "Forest",
+          "Desert",
+          "Riverside",
+          "Hilltop",
+          "Urban Park",
+          "Rural",
+          "Island"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "resorts",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Luxury",
+          "Budget",
+          "Boutique",
+          "Eco Resort",
+          "Beach Resort",
+          "Hill Resort",
+          "Spa Resort",
+          "Heritage",
+          "Wellness",
+          "Family Resort",
+          "Honeymoon",
+          "All-Inclusive",
+          "Glamping",
+          "Treehouse"
+        ]
+      },
+      {
+        "name": "customization",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Room Service",
+          "Private Pool",
+          "Spa & Wellness",
+          "Adventure Activities",
+          "Cultural Experiences",
+          "All Inclusive",
+          "Guided Tours",
+          "Personal Chef",
+          "Bonfire Night",
+          "Yoga & Meditation",
+          "Water Sports"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Beachfront",
+          "Hillside",
+          "Lakeside",
+          "Forest",
+          "Desert",
+          "Riverside",
+          "Countryside",
+          "Island",
+          "Urban"
+        ]
+      },
+      {
+        "name": "people",
+        "type": "number",
+        "placeholder": "Number of guests"
+      },
+      {
+        "name": "price",
+        "type": "number",
+        "placeholder": "Max price per night (₹)"
+      }
+    ]
+  },
+  {
+    "category": "games",
+    "filters": [
+      {
+        "name": "sport",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Cricket",
+          "Football",
+          "Basketball",
+          "Badminton",
+          "Tennis",
+          "Table Tennis",
+          "Swimming",
+          "Bowling",
+          "Archery",
+          "Paintball",
+          "Laser Tag",
+          "Go Karting",
+          "Ice Skating",
+          "Roller Skating",
+          "Golf",
+          "Boxing",
+          "Volleyball",
+          "Squash"
+        ]
+      },
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Indoor",
+          "Outdoor",
+          "Virtual Reality",
+          "Arcade",
+          "Water Sports",
+          "Board Games Cafe",
+          "Esports Arena",
+          "Trampoline Park",
+          "Escape Room",
+          "Adventure Zone"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Indoor Arena",
+          "Open Ground",
+          "Stadium",
+          "Sports Complex",
+          "Mall",
+          "Club",
+          "Park",
+          "Waterpark"
+        ]
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "nightlife",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Nightclub",
+          "Bar",
+          "Lounge",
+          "Pub",
+          "Brewery",
+          "Rooftop Bar",
+          "Live Music Venue",
+          "Comedy Club",
+          "Karaoke",
+          "Jazz Bar",
+          "Wine Bar",
+          "Cocktail Bar",
+          "Beach Club"
+        ]
+      },
+      {
+        "name": "ambience",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "High Energy",
+          "Chill & Relaxed",
+          "Live DJ",
+          "Live Band",
+          "Retro/Vintage",
+          "Themed Nights",
+          "Ladies Night",
+          "Rooftop Vibes",
+          "Pool Party",
+          "Underground"
+        ]
+      },
+      {
+        "name": "musicGenre",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Bollywood",
+          "EDM",
+          "Hip Hop",
+          "Jazz",
+          "Rock",
+          "Pop",
+          "Techno",
+          "House",
+          "Indie",
+          "Sufi",
+          "Mixed"
+        ]
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "wellness",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Spa",
+          "Yoga Center",
+          "Meditation Retreat",
+          "Ayurveda",
+          "Naturopathy",
+          "Hot Springs",
+          "Fitness Studio",
+          "Wellness Resort",
+          "Detox Center",
+          "Sound Healing",
+          "Float Tank",
+          "Cryotherapy"
+        ]
+      },
+      {
+        "name": "therapy",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Deep Tissue Massage",
+          "Swedish Massage",
+          "Aromatherapy",
+          "Reflexology",
+          "Hot Stone",
+          "Acupuncture",
+          "Hydrotherapy",
+          "Mud Bath",
+          "Panchakarma",
+          "Thai Massage",
+          "Shirodhara"
+        ]
+      },
+      {
+        "name": "duration",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "1 Hour",
+          "2 Hours",
+          "Half Day",
+          "Full Day",
+          "Weekend",
+          "Week Long"
+        ]
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "shopping",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Mall",
+          "Street Market",
+          "Flea Market",
+          "Boutique Store",
+          "Outlet Store",
+          "Local Bazaar",
+          "Night Market",
+          "Handicraft Market",
+          "Luxury Shopping",
+          "Thrift Store",
+          "Farmers Market"
+        ]
+      },
+      {
+        "name": "specialty",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Fashion",
+          "Electronics",
+          "Handicrafts",
+          "Jewelry",
+          "Spices & Food",
+          "Antiques",
+          "Books",
+          "Art & Decor",
+          "Textiles",
+          "Pottery",
+          "Leather Goods",
+          "Souvenirs"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Indoor",
+          "Outdoor",
+          "Covered Market",
+          "AC Mall",
+          "Open Air"
+        ]
+      },
+      {
+        "name": "budget",
+        "type": "number",
+        "placeholder": "Max budget (₹)"
+      }
+    ]
+  },
+  {
+    "category": "heritage",
+    "filters": [
+      {
+        "name": "type",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Fort",
+          "Palace",
+          "Temple",
+          "Mosque",
+          "Church",
+          "Museum",
+          "Monument",
+          "Archaeological Site",
+          "UNESCO Site",
+          "Historical Garden",
+          "Stepwell",
+          "Cave",
+          "Ruins",
+          "War Memorial",
+          "Mausoleum"
+        ]
+      },
+      {
+        "name": "era",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "Ancient",
+          "Medieval",
+          "Mughal",
+          "Colonial",
+          "Post-Independence",
+          "Modern"
+        ]
+      },
+      {
+        "name": "area",
+        "type": "select",
+        "multiple": true,
+        "options": [
+          "City Center",
+          "Outskirts",
+          "Hilltop",
+          "Riverside",
+          "Coastal",
+          "Forest Area",
+          "Desert"
+        ]
+      }
+    ]
+  }
+]

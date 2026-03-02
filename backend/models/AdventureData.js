@@ -8,8 +8,8 @@ const adventureDataSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  type: { type: String, required: true, maxlength: 25 },
-  area: { type: String, required: true, maxlength: 30 },
+  type: { type: [String], required: true, maxlength: 25 },
+  area: { type: [String], required: true, maxlength: 30 },
   numberAllowed: { type: Number, default: null },
   budget: { type: Number, required: true, max: 99999 }
 }, { timestamps: true });

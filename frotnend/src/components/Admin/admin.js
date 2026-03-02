@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./admin.css";
+import filterConfig from '../../utils/filters.json';
+import Select from "react-select";
+
 
 const AdminPage = () => {
   const [categories, setCategories] = useState([
@@ -26,28 +29,33 @@ const AdminPage = () => {
   const [images, setImages] = useState([]);
 
   //   useEffect(() => {
-  //     axios.get("https://destiknowrevive.onrender.com/api/locations/categories")
+  //     axios.get("http://localhost:5000/api/locations/categories")
   //       .then(res => setCategories(res.data.categories))
   //       .catch(err => console.error(err));
   //   }, []);
 
-  const handleCategoryChange = async (e) => {
+  console.log(filterConfig);
+
+  const handleCategoryChange = (e) => {
     const category = e.target.value;
     setSelectedCategory(category);
 
-    const res = await axios.get(`https://destiknowrevive.onrender.com/api/locations/filters/${category}`);
-    setFilters(res.data.filters);
+    const config = filterConfig.find(c => c.category === category);
+    if (!config) return;
 
-    // Reset dynamic fields
-    const dynamic = {};
-    res.data.filters.forEach(f => dynamic[f] = "");
-    setCategoryData(dynamic);
+    setFilters(config.filters);
+
+    const initial = {};
+    config.filters.forEach(f => {
+      initial[f.name] = f.multiple ? [] : "";
+    });
+
+    setCategoryData(initial);
   };
-
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
-  //   await axios.post("https://destiknowrevive.onrender.com/api/locations/add-location", {
+  //   await axios.post("http://localhost:5000/api/locations/add-location", {
   //     baseData: {
   //       ...baseData,
   //       categoryName: selectedCategory
@@ -79,7 +87,7 @@ const AdminPage = () => {
     }
 
     await axios.post(
-      "https://destiknowrevive.onrender.com/api/locations/add-location",
+      "http://localhost:5000/api/locations/add-location",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" }
@@ -150,16 +158,60 @@ const AdminPage = () => {
           />
 
           {/* DYNAMIC FILTER FIELDS */}
-          {filters.map(filter => (
-            <input
-              key={filter}
-              className="admin-input"
-              placeholder={filter}
-              onChange={(e) =>
-                setCategoryData({ ...categoryData, [filter]: e.target.value })
-              }
-            />
-          ))}
+          {filters.map(filter => {
+            if (filter.type === "select") {
+              const options = filter.options.map(opt => ({
+                label: opt,
+                value: opt
+              }));
+
+              return (
+                <div key={filter.name} className="admin-input-wrapper">
+                  <label className="admin-label">
+                    {filter.name.charAt(0).toUpperCase() + filter.name.slice(1)}
+                  </label>
+
+                  <Select
+                    isMulti={true}
+                    options={options}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    placeholder={`Select ${filter.name}`}
+                    value={(categoryData[filter.name] || []).map(v => ({
+                      label: v,
+                      value: v
+                    }))}
+                    onChange={(selected) => {
+                      setCategoryData({
+                        ...categoryData,
+                        [filter.name]: selected.map(item => item.value)
+                      });
+                    }}
+                  />
+                </div>
+              );
+            }
+
+            if (filter.type === "number") {
+              return (
+                <input
+                  key={filter.name}
+                  type="number"
+                  className="admin-input"
+                  placeholder={filter.placeholder}
+                  value={categoryData[filter.name] || ""}
+                  onChange={(e) =>
+                    setCategoryData({
+                      ...categoryData,
+                      [filter.name]: e.target.value
+                    })
+                  }
+                />
+              );
+            }
+
+            return null;
+          })}
 
           <input
             type="file"
