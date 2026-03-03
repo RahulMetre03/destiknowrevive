@@ -1,7 +1,7 @@
 // services/locationService.js
 import ApiService from './apiServices.js';
 import axios from 'axios';
-const BASE_URL = 'https://destiknowrevive.onrender.com/api';
+const BASE_URL = 'http://localhost:5000/api';
 
 export class LocationService {
   // Search for locations
@@ -77,6 +77,48 @@ export class LocationService {
     } catch (error) {
       console.error('Get location details error:', error);
       throw error;
+    }
+  }
+
+  // --- Reviews CRUD Endpoints ---
+
+  static async getReviews(locationId) {
+    try {
+      const res = await axios.get(`${BASE_URL}/reviews/place/${locationId}`);
+      return res.data;
+    } catch (error) {
+      console.error('LocationService.getReviews error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to fetch reviews');
+    }
+  }
+
+  static async createReview(reviewData) {
+    try {
+      const res = await axios.post(`${BASE_URL}/reviews`, reviewData);
+      return res.data;
+    } catch (error) {
+      console.error('LocationService.createReview error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to create review');
+    }
+  }
+
+  static async updateReview(id, reviewData) {
+    try {
+      const res = await axios.put(`${BASE_URL}/reviews/${id}`, reviewData);
+      return res.data;
+    } catch (error) {
+      console.error('LocationService.updateReview error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to update review');
+    }
+  }
+
+  static async deleteReview(id) {
+    try {
+      const res = await axios.delete(`${BASE_URL}/reviews/${id}`);
+      return res.data;
+    } catch (error) {
+      console.error('LocationService.deleteReview error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to delete review');
     }
   }
 

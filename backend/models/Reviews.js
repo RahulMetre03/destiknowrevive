@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import User from './user.js';
-import Locations from './Location.js'
+import { User } from './user.js';
+import { Location } from './Location.js'
 
 const reviewSchema = new mongoose.Schema({
   userId: {
@@ -9,7 +9,7 @@ const reviewSchema = new mongoose.Schema({
     ref: User
   },
   locationId: {
-    type: Number, // or String
+    type: mongoose.Schema.Types.ObjectId, // or String
     required: true,
     ref: Location
   },
@@ -28,4 +28,4 @@ const reviewSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model("Reviews", reviewSchema);
+export default mongoose.model("Review", reviewSchema);

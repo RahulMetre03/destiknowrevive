@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './LocationDetailsPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import LocationService from '../services/LocationService'; // imported LocationService
 const LocationDetailsPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -62,6 +62,77 @@ const LocationDetailsPage = () => {
 
   const formatKey = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
   const excludedKeys = ['_id', '__v', 'locationId', 'createdAt', 'updatedAt'];
+
+  // Add state for Reviews
+  const [reviews, setReviews] = useState([]);
+  const [newReviewText, setNewReviewText] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState(5);
+  const [avgRating, setAvgRating] = useState(0);
+
+  // Hardcode a userId for demonstration since auth is not defined
+  const DEMO_USER_ID = "000000000000000000000001";
+
+  // Fetch reviews on mount
+  useEffect(() => {
+    if (location && location._id) { // Wait, location._id or location.id? Let's assume location.id or location._id
+      fetchReviews();
+    }
+  }, [location]);
+
+  const fetchReviews = async () => {
+    try {
+      const locId = location._id || location.id;
+      if (!locId) return;
+
+      const response = await LocationService.getReviews(locId);
+      if (response && response.data) {
+        setReviews(response.data);
+      }
+
+      // Compute average rating manually if API 'getAverageRating' is not in location service,
+      // or just calculate from the fetched array.
+      if (response && response.data && response.data.length > 0) {
+        const sum = response.data.reduce((acc, r) => acc + r.rating, 0);
+        setAvgRating(sum / response.data.length);
+      } else {
+        setAvgRating(0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch reviews", err);
+    }
+  };
+
+  const submitReview = async () => {
+    if (!newReviewText.trim()) return;
+
+    try {
+      const locId = location._id || location.id;
+      await LocationService.createReview({
+        userId: DEMO_USER_ID,
+        locationId: locId,
+        rating: newReviewRating,
+        reviewText: newReviewText
+      });
+      setNewReviewText("");
+      setNewReviewRating(5);
+      fetchReviews(); // Re-fetch
+    } catch (error) {
+      console.error('Failed to submit review', error);
+      alert('Failed to submit review. Ensure backend is running.');
+    }
+  };
+
+  const deleteReview = async (id) => {
+    try {
+      if (window.confirm('Delete this review?')) {
+        await LocationService.deleteReview(id);
+        fetchReviews();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete review');
+    }
+  };
 
   if (!location) {
     return (
@@ -197,6 +268,60 @@ const LocationDetailsPage = () => {
         </aside>
 
       </div>
+
+      {/* REVIEWS SECTION */}
+      <section className="reviews-section">
+        <h2 className="section-title">Traveler Reviews {avgRating > 0 && `(Avg: ${avgRating.toFixed(1)}/5)`}</h2>
+
+        <div className="reviews-container">
+          {reviews.length === 0 ? (
+            <p className="no-reviews">No reviews yet. Be the first to share your experience!</p>
+          ) : (
+            <div className="reviews-list">
+              {reviews.map(review => (
+                <div key={review._id} className="review-card">
+                  <div className="review-header">
+                    <span className="review-rating">{'⭐'.repeat(review.rating)}</span>
+                    <span className="review-date">{new Date(review.timestamp).toLocaleDateString()}</span>
+                  </div>
+                  <p className="review-text">{review.reviewText}</p>
+
+                  {/* Assuming DEMO_USER_ID can delete their own review */}
+                  {(review.userId === DEMO_USER_ID) && (
+                    <button className="delete-review-btn" onClick={() => deleteReview(review._id)}>
+                      🗑️ Delete
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="add-review-box">
+            <h3>Write a Review</h3>
+            <div className="rating-selector">
+              <label>Rating: </label>
+              <select
+                value={newReviewRating}
+                onChange={(e) => setNewReviewRating(Number(e.target.value))}
+              >
+                {[5, 4, 3, 2, 1].map(r => <option key={r} value={r}>{r} Stars</option>)}
+              </select>
+            </div>
+
+            <textarea
+              className="review-input"
+              rows="4"
+              placeholder="Share details of your experience at this location..."
+              value={newReviewText}
+              onChange={(e) => setNewReviewText(e.target.value)}
+            />
+            <button className="submit-review-btn" onClick={submitReview}>
+              Post Review
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* Lightbox Modal */}
       {lightboxImage && (

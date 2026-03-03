@@ -5,6 +5,7 @@ import locationRoutes from './routes/LocationRoutes.js';
 import cors from 'cors';
 
 import loginRoutes from './routes/login.js'
+import reviewRoutes from './routes/ReviewRoutes.js'
 dotenv.config();
 const app = express();
 
@@ -18,7 +19,7 @@ app.use(cors());
 
 app.use('/api/users', loginRoutes);
 app.use('/api/locations', locationRoutes);
-
+app.use('/api/reviews', reviewRoutes);
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
