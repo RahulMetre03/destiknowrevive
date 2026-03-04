@@ -70,7 +70,7 @@ const LocationDetailsPage = () => {
   const [avgRating, setAvgRating] = useState(0);
 
   // Hardcode a userId for demonstration since auth is not defined
-  const DEMO_USER_ID = "000000000000000000000001";
+  const user_id = localStorage.getItem("_id");
 
   // Fetch reviews on mount
   useEffect(() => {
@@ -108,7 +108,7 @@ const LocationDetailsPage = () => {
     try {
       const locId = location._id || location.id;
       await LocationService.createReview({
-        userId: DEMO_USER_ID,
+        userId: user_id,
         locationId: locId,
         rating: newReviewRating,
         reviewText: newReviewText
@@ -287,7 +287,7 @@ const LocationDetailsPage = () => {
                   <p className="review-text">{review.reviewText}</p>
 
                   {/* Assuming DEMO_USER_ID can delete their own review */}
-                  {(review.userId === DEMO_USER_ID) && (
+                  {(review.userId === user_id) && (
                     <button className="delete-review-btn" onClick={() => deleteReview(review._id)}>
                       🗑️ Delete
                     </button>
@@ -297,29 +297,36 @@ const LocationDetailsPage = () => {
             </div>
           )}
 
-          <div className="add-review-box">
-            <h3>Write a Review</h3>
-            <div className="rating-selector">
-              <label>Rating: </label>
-              <select
-                value={newReviewRating}
-                onChange={(e) => setNewReviewRating(Number(e.target.value))}
-              >
-                {[5, 4, 3, 2, 1].map(r => <option key={r} value={r}>{r} Stars</option>)}
-              </select>
+          {reviews.some(r => r.userId === user_id) ? (
+            <div className="add-review-box">
+              <h3>You've Already Reviewed This Location</h3>
+              <p>Thank you for sharing your experience!</p>
             </div>
+          ) : (
+            <div className="add-review-box">
+              <h3>Write a Review</h3>
+              <div className="rating-selector">
+                <label>Rating: </label>
+                <select
+                  value={newReviewRating}
+                  onChange={(e) => setNewReviewRating(Number(e.target.value))}
+                >
+                  {[5, 4, 3, 2, 1].map(r => <option key={r} value={r}>{r} Stars</option>)}
+                </select>
+              </div>
 
-            <textarea
-              className="review-input"
-              rows="4"
-              placeholder="Share details of your experience at this location..."
-              value={newReviewText}
-              onChange={(e) => setNewReviewText(e.target.value)}
-            />
-            <button className="submit-review-btn" onClick={submitReview}>
-              Post Review
-            </button>
-          </div>
+              <textarea
+                className="review-input"
+                rows="4"
+                placeholder="Share details of your experience at this location..."
+                value={newReviewText}
+                onChange={(e) => setNewReviewText(e.target.value)}
+              />
+              <button className="submit-review-btn" onClick={submitReview}>
+                Post Review
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

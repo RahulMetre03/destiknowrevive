@@ -57,6 +57,7 @@ export const checkLogin = async (req, res) => {
     return res.status(200).json({
       message: "Welcome user",
       username: user.username,
+      _id: user._id.toString(),
       city: user.city
     });
 
