@@ -29,7 +29,7 @@ const AdminPage = () => {
   const [images, setImages] = useState([]);
 
   //   useEffect(() => {
-  //     axios.get("http://localhost:5000/api/locations/categories")
+  //     axios.get("https://destiknowrevive.onrender.com/api/locations/categories")
   //       .then(res => setCategories(res.data.categories))
   //       .catch(err => console.error(err));
   //   }, []);
@@ -55,7 +55,7 @@ const AdminPage = () => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
-  //   await axios.post("http://localhost:5000/api/locations/add-location", {
+  //   await axios.post("https://destiknowrevive.onrender.com/api/locations/add-location", {
   //     baseData: {
   //       ...baseData,
   //       categoryName: selectedCategory
@@ -87,7 +87,7 @@ const AdminPage = () => {
     }
 
     await axios.post(
-      "http://localhost:5000/api/locations/add-location",
+      "https://destiknowrevive.onrender.com/api/locations/add-location",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" }

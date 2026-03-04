@@ -18,7 +18,7 @@ const LocationCard = ({ location, category, index }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:5000/api/locations/get-details', {
+      const response = await axios.post('https://destiknowrevive.onrender.com/api/locations/get-details', {
         tablename: category,
         locationId: location._id
       });
@@ -44,7 +44,7 @@ const LocationCard = ({ location, category, index }) => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.post('http://localhost:5000/api/locations/get-details', {
+        const response = await axios.post('https://destiknowrevive.onrender.com/api/locations/get-details', {
           tablename: category,
           locationId: location._id
         });
