@@ -16,12 +16,12 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use('/api/users', loginRoutes);
-app.use('/api/locations',locationRoutes);
-
 app.get('/healthz', (req, res) => {
   res.status(200).send('OK');
 });
+app.use('/api/users', loginRoutes);
+app.use('/api/locations',locationRoutes);
+
 
 
 app.get('/', (req, res) => {
