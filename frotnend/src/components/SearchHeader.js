@@ -12,6 +12,8 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
     }
   };
 
+  console.log("github testing");
+
   return (
     <div className="header">
       <a href="/" className="logo">
