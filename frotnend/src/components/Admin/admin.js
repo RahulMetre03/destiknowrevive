@@ -66,6 +66,14 @@ const AdminPage = () => {
   //   setMessage("✨ Location Added Successfully");
   // };
 
+  const categoryMap = {
+    restaurant: 1,
+    adventure: 2,
+    scenery: 3,
+    resorts: 4,
+    games: 5
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,10 +81,14 @@ const AdminPage = () => {
 
     // Add baseData
     Object.keys(baseData).forEach(key => {
-      formData.append(key, baseData[key]);
+      // Don't append empty categoryId from baseData state anymore
+      if (key !== "categoryId") {
+        formData.append(key, baseData[key]);
+      }
     });
 
     formData.append("categoryName", selectedCategory);
+    formData.append("categoryId", categoryMap[selectedCategory]);
 
     // Add categoryData
     formData.append("categoryData", JSON.stringify(categoryData));
@@ -144,12 +156,6 @@ const AdminPage = () => {
             className="admin-input"
             placeholder="Country"
             onChange={(e) => setBaseData({ ...baseData, country: e.target.value })}
-          />
-          <input
-            className="admin-input"
-            placeholder="Category ID"
-            type="number"
-            onChange={(e) => setBaseData({ ...baseData, categoryId: e.target.value })}
           />
           <input
             className="admin-input"
