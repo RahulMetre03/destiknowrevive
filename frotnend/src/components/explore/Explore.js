@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchHeader from '../SearchHeader';
 import FilterForm from '../FilterForm';
 import LocationGrid from '../LocationGrid';
 import { LocationService } from '../../services/LocationService';
 import './Explore.css';
+import { useNavigate } from 'react-router-dom';
 
 const Explore = () => {
+  const navigate = useNavigate();
   const [locations, setLocations] = useState([]);
   const [filters, setFilters] = useState([]);
   const [currentCategory, setCurrentCategory] = useState('');
@@ -61,6 +63,13 @@ const Explore = () => {
     { name: 'Resorts', emoji: '🏖️', desc: 'Luxury stays & chill' },
     { name: 'Games', emoji: '🎮', desc: 'Arcades & activity centers' }
   ];
+
+  useEffect(() => {
+    const city = localStorage.getItem('city');
+    if (!city) {
+      navigate('/');
+    }
+  }, [])
 
   return (
     <div className="app">
