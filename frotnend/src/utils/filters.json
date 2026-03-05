@@ -50,20 +50,6 @@
         ]
       },
       {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Indoor",
-          "Outdoor",
-          "Rooftop",
-          "Terrace",
-          "Poolside",
-          "Garden",
-          "Beachfront"
-        ]
-      },
-      {
         "name": "numberAllowed",
         "type": "number",
         "placeholder": "Max group size"
@@ -103,23 +89,6 @@
         ]
       },
       {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Mountains",
-          "Forest",
-          "Desert",
-          "Beach",
-          "River",
-          "Lake",
-          "Canyon",
-          "Urban",
-          "Underground",
-          "Coastal"
-        ]
-      },
-      {
         "name": "numberAllowed",
         "type": "number",
         "placeholder": "Max group size"
@@ -155,23 +124,6 @@
           "Heritage Site",
           "Wildlife Sanctuary",
           "National Park"
-        ]
-      },
-      {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Mountains",
-          "Coastal",
-          "Plains",
-          "Forest",
-          "Desert",
-          "Riverside",
-          "Hilltop",
-          "Urban Park",
-          "Rural",
-          "Island"
         ]
       }
     ]
@@ -216,22 +168,6 @@
           "Bonfire Night",
           "Yoga & Meditation",
           "Water Sports"
-        ]
-      },
-      {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Beachfront",
-          "Hillside",
-          "Lakeside",
-          "Forest",
-          "Desert",
-          "Riverside",
-          "Countryside",
-          "Island",
-          "Urban"
         ]
       },
       {
@@ -289,21 +225,6 @@
           "Trampoline Park",
           "Escape Room",
           "Adventure Zone"
-        ]
-      },
-      {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Indoor Arena",
-          "Open Ground",
-          "Stadium",
-          "Sports Complex",
-          "Mall",
-          "Club",
-          "Park",
-          "Waterpark"
         ]
       },
       {
@@ -479,18 +400,6 @@
         ]
       },
       {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "Indoor",
-          "Outdoor",
-          "Covered Market",
-          "AC Mall",
-          "Open Air"
-        ]
-      },
-      {
         "name": "budget",
         "type": "number",
         "placeholder": "Max budget (₹)"
@@ -533,20 +442,6 @@
           "Colonial",
           "Post-Independence",
           "Modern"
-        ]
-      },
-      {
-        "name": "area",
-        "type": "select",
-        "multiple": true,
-        "options": [
-          "City Center",
-          "Outskirts",
-          "Hilltop",
-          "Riverside",
-          "Coastal",
-          "Forest Area",
-          "Desert"
         ]
       }
     ]
