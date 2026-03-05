@@ -13,6 +13,7 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
   };
 
   console.log("github testing");
+  console.log("GITHUB TEST")
 
   return (
     <div className="header">
