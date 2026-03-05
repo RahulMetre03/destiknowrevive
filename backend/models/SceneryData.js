@@ -7,8 +7,8 @@ const sceneryDataSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  type: { type: [String], required: true, maxlength: 25 },
-  area: { type: [String], required: true, maxlength: 30 }
+  type: { type: String, required: true },
+  area: { type: String, required: true },
 }, { timestamps: true });
 
 export default mongoose.model('scenerydatas', sceneryDataSchema);

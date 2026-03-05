@@ -8,7 +8,7 @@ const gamesDataSchema = new mongoose.Schema({
     unique: true
   },
   sport: { type: [String], required: true, maxlength: 25 },
-  area: { type: [String], required: true, maxlength: 30 },
+  area: { type: String, required: true },
   type: { type: [String], required: true, maxlength: 30 },
   budget: { type: Number, required: true, max: 99999 }
 }, { timestamps: true });

@@ -18,6 +18,7 @@ const AdminPage = () => {
   const [baseData, setBaseData] = useState({
     placeName: "",
     description: "",
+    area: "",
     city: "",
     state: "",
     country: "",
@@ -55,7 +56,7 @@ const AdminPage = () => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
 
-  //   await axios.post("https://destiknowrevive.onrender.com/api/locations/add-location", {
+  //   await axios.post("http://localhost:5000/api/locations/add-location", {
   //     baseData: {
   //       ...baseData,
   //       categoryName: selectedCategory
@@ -141,6 +142,11 @@ const AdminPage = () => {
             placeholder="Description"
             onChange={(e) => setBaseData({ ...baseData, description: e.target.value })}
             required
+          />
+          <input
+            className="admin-input"
+            placeholder="Area"
+            onChange={(e) => setBaseData({ ...baseData, area: e.target.value })}
           />
           <input
             className="admin-input"

@@ -8,7 +8,7 @@ const restaurantDataSchema = new mongoose.Schema({
     unique: true
   },
   numberAllowed: { type: Number, required: true, max: 99 },
-  area: { type: [String], required: true },
+  area: { type: String, required: true },
   cuisine: { type: [String], required: true },
   ambience: { type: [String], required: true },
   budget: { type: Number, required: true, max: 99999 },

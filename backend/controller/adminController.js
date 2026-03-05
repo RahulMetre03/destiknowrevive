@@ -62,7 +62,7 @@ import cloudinary from '../config/cloudinary.js';
 //         throw new Error('Invalid category');
 //     }
 
-   
+
 //     await DataModel.create([{
 //       locationId,
 //       ...categoryData
@@ -97,6 +97,7 @@ export const addLocation = async (req, res) => {
     const {
       placeName,
       description,
+      area,
       city,
       state,
       country,
@@ -164,6 +165,7 @@ export const addLocation = async (req, res) => {
     // 🔹 Insert category-specific data (convert numbers!)
     await DataModel.create([{
       locationId,
+      area,
       ...categoryData,
       numberAllowed: Number(categoryData.numberAllowed),
       budget: Number(categoryData.budget)
