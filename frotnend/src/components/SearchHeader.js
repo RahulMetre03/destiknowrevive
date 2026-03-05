@@ -12,7 +12,7 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
     }
   };
 
-  console.log("github testing");
+  console.log("github testing final");
   console.log("GITHUB TEST");
 
   return (
