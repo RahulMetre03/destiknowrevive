@@ -78,6 +78,40 @@ const AdminPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 1. Validate Base Rules & Images
+    if (!selectedCategory) {
+      setMessage("⚠️ Please select a category first.");
+      return;
+    }
+    if (images.length === 0) {
+      setMessage("⚠️ Please upload at least one image.");
+      return;
+    }
+
+    // 2. Validate Base Data (static fields)
+    const requiredBaseFields = ["placeName", "description", "area", "city", "state", "country"];
+    for (const field of requiredBaseFields) {
+      if (!baseData[field] || baseData[field].trim() === "") {
+        setMessage(`⚠️ Please fill out the "${field}" field.`);
+        return;
+      }
+    }
+
+    // 3. Validate Dynamic Category Data
+    for (const filter of filters) {
+      const val = categoryData[filter.name];
+      // If it's a multiple select (array), it shouldn't be empty
+      if (filter.multiple && (!val || val.length === 0)) {
+        setMessage(`⚠️ Please select at least one option for "${filter.name}".`);
+        return;
+      }
+      // If it's a number/text (string), it shouldn't be empty
+      if (!filter.multiple && (!val || String(val).trim() === "")) {
+        setMessage(`⚠️ Please fill out the "${filter.name}" field.`);
+        return;
+      }
+    }
+
     const formData = new FormData();
 
     // Add baseData
@@ -99,15 +133,24 @@ const AdminPage = () => {
       formData.append("images", images[i]);
     }
 
-    await axios.post(
-      "https://destiknowrevive.onrender.com/api/locations/add-location",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" }
-      }
-    );
+    try {
+      await axios.post(
+        "https://destiknowrevive.onrender.com/api/locations/add-location",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" }
+        }
+      );
 
-    setMessage("✨ Location Added Successfully");
+      setMessage("✨ Location Added Successfully");
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage("⚠️ Error: " + error.response.data.message);
+      } else {
+        setMessage("⚠️ Failed to add location. Please try again.");
+      }
+      console.error("Add location error:", error);
+    }
   };
 
   return (
