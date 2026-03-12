@@ -1,5 +1,6 @@
-import { User } from "../models/user.js"; // Assuming default export
+import { User } from "../models/user.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req, res) => {
   try {
@@ -30,8 +31,14 @@ export const registerUser = async (req, res) => {
 
     await newUser.save();
 
+    const token = jwt.sign(
+      { _id: newUser._id, username: newUser.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     console.log(`✅ User registered: ${username} (${email}) from ${city}`);
-    return res.status(200).json({ message: "User saved", user: newUser });
+    return res.status(200).json({ message: "User saved", user: newUser, token });
 
   } catch (err) {
     console.error("Error: ", err);
@@ -52,13 +59,19 @@ export const checkLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // Send more info back to frontend
+    const token = jwt.sign(
+      { _id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     console.log(`✅ User logged in: ${user.username} from ${user.city}`);
     return res.status(200).json({
       message: "Welcome user",
       username: user.username,
       _id: user._id.toString(),
-      city: user.city
+      city: user.city,
+      token
     });
 
   } catch (err) {

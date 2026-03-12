@@ -1,14 +1,19 @@
 // services/apiService.js
-const API_BASE_URL = 'https://destiknowrevive.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 class ApiService {
   // Generic request handler
   async makeRequest(endpoint, options = {}) {
     try {
       const url = `${API_BASE_URL}${endpoint}`;
+
+      const token = localStorage.getItem('token');
+      const authHeader = token ? { 'Authorization': `Bearer ${token}` } : {};
+
       const config = {
         headers: {
           'Content-Type': 'application/json',
+          ...authHeader,
           ...options.headers,
         },
         ...options,

@@ -1,0 +1,210 @@
+/* ============ USER PROFILE ============ */
+.profile-page {
+    min-height: 100vh;
+    background: var(--bg-base);
+    padding-top: 80px;
+}
+
+.profile-content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Hero card */
+.profile-hero {
+    border-radius: var(--radius-xl);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    animation: fadeUp 0.5s var(--ease-out-expo) both;
+}
+
+.profile-avatar-wrap {
+    position: relative;
+    width: 96px;
+    height: 96px;
+}
+
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid transparent;
+    background: var(--gradient-cosmic) padding-box, var(--gradient-cosmic) border-box;
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.4);
+}
+
+.profile-avatar-fallback {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--gradient-cosmic);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.4);
+}
+
+.verified-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--neon-blue);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-base);
+}
+
+.profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-displayname {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.profile-username {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.profile-bio {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+.profile-city {
+    font-size: 0.85rem;
+    color: var(--neon-teal);
+}
+
+/* Stats */
+.profile-stats {
+    display: flex;
+    gap: 32px;
+    padding: 16px 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    width: 100%;
+    justify-content: center;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Edit profile */
+.edit-profile-btn {
+    padding: 10px 28px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.edit-profile-btn:hover {
+    border-color: var(--neon-purple);
+    background: rgba(139, 92, 246, 0.08);
+}
+
+/* Posts grid */
+.profile-posts-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 8px;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 48px;
+    color: var(--text-muted);
+}
+
+/* Skeleton */
+.profile-skeleton {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.skeleton-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-surface-elevated) 50%, var(--bg-surface) 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-lines {
+    width: 200px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-surface-elevated) 50%, var(--bg-surface) 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 1.5s infinite;
+}

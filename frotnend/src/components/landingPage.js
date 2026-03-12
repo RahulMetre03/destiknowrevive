@@ -6,7 +6,6 @@ import './landing.css';
 
 const LandingPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -56,13 +55,16 @@ const LandingPage = () => {
         }
 
         setError(false);
+        setError(false);
         setMessage("Welcome back! Redirecting...");
-        localStorage.setItem("username", formData.username);
+        localStorage.setItem("username", response.data.username || formData.username); // Fallback to form data
         if (response.data && response.data.city) {
           localStorage.setItem("city", response.data.city);
           localStorage.setItem("_id", response.data._id);
         }
-        setIsLoggedIn(true);
+        if (response.data && response.data.token) {
+          localStorage.setItem("token", response.data.token);
+        }
         setTimeout(() => navigate('/explore'), 1000);
 
       } else {

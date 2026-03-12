@@ -1,0 +1,59 @@
+/* ============ FOLLOW BUTTON ============ */
+.follow-btn {
+    padding: 10px 32px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-fluid);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 110px;
+    justify-content: center;
+
+    background: var(--gradient-cosmic);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+}
+
+.follow-btn:hover:not(:disabled) {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(139, 92, 246, 0.5);
+}
+
+.follow-btn.following {
+    background: none;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    box-shadow: none;
+}
+
+.follow-btn.following:hover:not(:disabled) {
+    border-color: #f87171;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.06);
+    box-shadow: none;
+}
+
+.follow-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.btn-spinner-sm {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.follow-btn.following .btn-spinner-sm {
+    border-color: rgba(148, 163, 184, 0.3);
+    border-top-color: var(--text-secondary);
+}

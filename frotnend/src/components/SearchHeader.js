@@ -52,6 +52,11 @@ const SearchHeader = ({ currentCity, setCurrentCity, onSearch, loading }) => {
       <div className="greeting">
         User <strong>{username || 'Guest'}</strong>
       </div>
+      <div>
+        <a href="/feed">Social</a>
+
+        <a href={`/profile/${localStorage.getItem('_id')}`}>Profile</a>
+      </div>
     </div>
   );
 };
